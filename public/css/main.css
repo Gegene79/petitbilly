@@ -1,0 +1,115 @@
+body {
+  padding-top: 50px;
+}
+.navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
+    margin-left: 0;
+}
+
+.fixed-bar-top{
+    display: block;
+    height: 40px;
+    position: fixed;
+    margin: 10px;
+}
+
+
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+
+text {
+    font: 12px sans-serif;
+}
+.svg {
+    display: block;
+    height:100%;
+}
+#chart_week{
+    height: 27em;
+    width: 100%;
+}
+#chart_6hours{
+    height: 13em;
+    height: 100%;
+}
+#chart_baseline{
+    height: 27em;
+    width: 100%;
+}
+#title{
+    font-family: 'Dancing Script', cursive;
+    font-size: 2em;
+}
+
+.temperature-title{
+    display: table-row;
+    vertical-align: bottom;
+    font-size: 1.5em;
+    text-align: left;
+    line-height: 100%;
+    font-family: 'Open Sans', sans-serif;
+    color: #aaa;
+}
+
+.temperature-number{
+    display: table-cell;
+    text-align: right;
+    vertical-align: top;
+    line-height: 100%;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 3.5em;
+}
+
+.temperature-unit{
+    display: table-cell;
+    text-align: left;
+    vertical-align: top;
+    line-height: 100%;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1em;
+}
+
+.temperature-date{
+    display: table-row;
+    vertical-align: top;
+    width: 100%;
+    font-size: 1em;
+    text-align: right;
+    color: #aaa;
+}
+
+#ExteriorIndicatorContainer{
+    display:flex;justify-content:center;align-items:center;
+    
+}
+#ExteriorIndicator{
+    display:flex;justify-content:center;align-items:center;
+}
+#ExteriorIndicatorNumber{
+    position: absolute;
+}
+.indicatorContainer{
+    height:100%;
+}
+.equal {
+    padding-top:15px;
+    padding-bottom:15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:center;align-items:center;
+}
+
+
+/* parte photos */
+
+.blueimp-gallery > .description {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  color: #aaa;
+  display: none;
+}
+.blueimp-gallery-controls > .description {
+  display: block;
+}
