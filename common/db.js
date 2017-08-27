@@ -289,9 +289,9 @@ exports.getCurrentValueByTypeAndName = function(type,name,datemin){
 
     return metrics.aggregate(
         [
-        { $match : { name: name, type: type, timestamp: {$gte: datemin}}},    
-        { $group: {_id: "", timestamp: {$last: "$timestamp" }, value: { $last: '$value'}}},
-        { $sort: {_id: 1}}
+        { $match : { name: name, type: type, timestamp: {$gte: datemin}}},
+        { $sort: {_id: -1}},
+        { $limit: 1}
         ]).toArray();
 };
 
@@ -300,6 +300,7 @@ exports.getCurrentValueByType = function(type,datemin){
     return metrics.aggregate(
         [
         { $match: {type: type, timestamp: {$gte: datemin}}},
+        { $sort: { timestamp: 1 }},
         { $group: {_id: "$name", timestamp: {$last: "$timestamp" }, value: { $last: '$value'}}},
         { $sort: {_id: 1}}
         ]).toArray();
@@ -310,6 +311,7 @@ exports.getCurrentValues = function(datemin){
     return metrics.aggregate(
         [
         { $match: {timestamp: {$gte: datemin}}},
+        { $sort: { timestamp: 1 }},
         { $group: {_id: {name:"$name", type:"$type"}, timestamp: {$last: "$timestamp" }, value: { $last: '$value'}}},
         { $sort: {_id: 1}}
         ]).toArray();
