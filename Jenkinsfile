@@ -58,12 +58,13 @@ pipeline {
                 echo "Done."                    
             }
         }
-
-        post {
+        
+    }
+    
+    post {
             failure {
                 echo 'Tidying up....'
                 cleanWs()
             }
         }
-    }
 }
