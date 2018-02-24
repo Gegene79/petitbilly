@@ -4,8 +4,8 @@ pipeline {
 
     environment {
         PACKAGE_NAME = "package_${BUILD_ID}.tar.gz"
-        BASE_DIR = "/var/www/node/"
-        ENV_STORE = "fabien@petitbilly:/home/fabien/env/"
+        BASE_DIR = "/var/www/node"
+        ENV_STORE = "fabien@petitbilly:/home/fabien/env"
     }
 
     stages {
@@ -48,9 +48,9 @@ pipeline {
                 echo "Sending package to ${env.BASE_DIR}/dist/"
                 sh "scp -BCp -P 979 ${env.PACKAGE_NAME} fabien@petitbilly:${env.BASE_DIR}/dist/ && rm -f ${env.PACKAGE_NAME}"
                 echo "Deflate ${env.BASE_DIR}/dist/${env.PACKAGE_NAME}"
-                sh "ssh -l fabien -p 979 petitbilly \"tar -xzvf ${env.BASE_DIR}/dist/${env.PACKAGE_NAME} -C ${env.BASE_DIR}/dist/ && rm -f ${env.BASE_DIR}dist/${env.PACKAGE_NAME}\""
+                sh "ssh -l fabien -p 979 petitbilly \"tar -xzvf ${env.BASE_DIR}/dist/${env.PACKAGE_NAME} -C ${env.BASE_DIR}/dist/ && rm -f ${env.BASE_DIR}/dist/${env.PACKAGE_NAME}\""
                 echo "Install ${env.BASE_DIR}/dist/${env.PACKAGE_NAME}"
-                sh "ssh -l fabien -p 979 petitbilly \"cd ${env.BASE_DIR}/dist && npm install\""
+                sh "ssh -l fabien -p 979 petitbilly \"cd ${env.BASE_DIR}/dist/ && npm install\""
                 echo "Exchange ${env.BASE_DIR}/dist/ and ${env.BASE_DIR}/monitor/"
                 sh "ssh -l fabien -p 979 petitbilly \" \
                         sudo systemctl stop node-monitor \
