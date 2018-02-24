@@ -4,9 +4,10 @@ pipeline {
 
     environment {
         PACKAGE_NAME = "package_${BUILD_ID}.tar.gz"
-        BASE_DIR = "/var/www/node"
+        TARGET_PATH = "/var/www/node"
+        TARGET_HOST = "fabien@petitbilly"
         ENV_STORE = "fabien@petitbilly:/home/fabien/env"
-        SW_DIR = "${env.BASE_DIR}/dist_${BUILD_ID}"
+        SW_PATH = "${env.TARGET_PATH}/dist_${BUILD_ID}"
                 
     }
 
@@ -14,7 +15,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                echo 'Retreive env file'
+                echo 'Retreive test environment file'
                 sh "scp -BCp -P 979 ${env.ENV_STORE}/node_petitbilly_test.env ${WORKSPACE}/.env"
                 echo 'Install modules'
                 sh 'npm install'
@@ -33,8 +34,6 @@ pipeline {
             }
 
             steps {
-                echo 'Retreive production env file'
-                sh "scp -BCp -P 979 ${env.ENV_STORE}/node_petitbilly_pro.env .env"
                 echo "Packaging... ${env.PACKAGE_NAME}"
                 sh "ls -lah && tar --exclude=node_modules -czvf ${env.PACKAGE_NAME} *"
             }
@@ -48,18 +47,20 @@ pipeline {
             
             steps {
                 
-                echo "Sending package to ${env.BASE_DIR}/"
-                sh "scp -BCp -P 979 ${env.PACKAGE_NAME} fabien@petitbilly:${env.BASE_DIR}/ && rm -f ${env.PACKAGE_NAME}"
-                echo "Deflate ${env.BASE_DIR}/${env.PACKAGE_NAME}"
-                sh "ssh -l fabien -p 979 petitbilly \"mkdir ${env.SW_DIR} && tar -xzvf ${env.BASE_DIR}/${env.PACKAGE_NAME} -C ${env.SW_DIR} && rm -f ${env.BASE_DIR}/${env.PACKAGE_NAME}\""
-                echo "Install ${env.BASE_DIR}/${env.PACKAGE_NAME}"
-                sh "ssh -l fabien -p 979 petitbilly \"cd ${env.SW_DIR} && npm install\""
-                echo "Exchange ${env.SW_DIR} and ${env.BASE_DIR}/monitor/"
+                echo "Sending package to ${env.TARGET_HOST}"
+                sh "scp -BCp -P 979 ${env.PACKAGE_NAME} ${env.TARGET_HOST}:${env.TARGET_PATH}/ && rm -f ${env.PACKAGE_NAME}"
+                echo "Deflate ${env.TARGET_PATH}/${env.PACKAGE_NAME}"
+                sh "ssh -l fabien -p 979 petitbilly \"mkdir ${env.SW_PATH} && tar -xzvf ${env.TARGET_PATH}/${env.PACKAGE_NAME} -C ${env.SW_PATH} && rm -f ${env.TARGET_PATH}/${env.PACKAGE_NAME}\""
+                echo 'Retreive production env file'
+                sh "scp -BCp -P 979 ${env.ENV_STORE}/node_petitbilly_pro.env ${env.TARGET_HOST}:${env.SW_PATH}/.env"
+                echo "Install ${env.TARGET_PATH}/${env.PACKAGE_NAME}"
+                sh "ssh -l fabien -p 979 petitbilly \"cd ${env.SW_DIR} && chmod 640 .env && npm install\""
+                echo "Exchange ${env.SW_DIR} and ${env.TARGET_PATH}/monitor/"
                 sh "ssh -l fabien -p 979 petitbilly \" \
                         sudo systemctl stop node-monitor \
-                        && rm -rf ${env.BASE_DIR}/monitor_old \
-                        && mv ${env.BASE_DIR}/monitor ${env.BASE_DIR}/monitor_old \
-                        && mv ${env.SW_DIR} ${env.BASE_DIR}/monitor \
+                        && rm -rf ${env.TARGET_PATH}/monitor_old \
+                        && mv ${env.TARGET_PATH}/monitor ${env.TARGET_PATH}/monitor_old \
+                        && mv ${env.SW_DIR} ${env.TARGET_PATH}/monitor \
                         && sudo systemctl start node-monitor \""
                 echo "Done."                    
             }
