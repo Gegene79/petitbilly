@@ -17,7 +17,7 @@ pipeline {
                 echo 'Install modules'
                 sh 'npm -df install'
                 echo 'Launch test'
-                sh 'npm test'
+                sh 'npm start & && npm test'
             }
         }
 
@@ -60,11 +60,11 @@ pipeline {
         }
         
     }
-    
+
     post {
-            failure {
-                echo 'Tidying up....'
-                cleanWs()
-            }
+        failure {
+            echo 'Tidying up on error....'
+            cleanWs()
         }
+    }
 }
