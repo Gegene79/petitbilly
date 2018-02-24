@@ -16,8 +16,10 @@ pipeline {
                 sh "scp -BCp -P 979 ${env.ENV_STORE}/node_petitbilly_test.env ${WORKSPACE}/.env"
                 echo 'Install modules'
                 sh 'npm -df install'
+                echo 'Launch app'
+                sh 'npm start &'
                 echo 'Launch test'
-                sh 'npm start & && npm test'
+                sh 'npm test'
             }
         }
 
