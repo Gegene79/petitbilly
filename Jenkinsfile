@@ -38,11 +38,11 @@ pipeline {
                     echo "Install ${env.BASE_DIR}/dist/${env.PACKAGE_NAME}"
                     sh "ssh -l fabien -p 979 petitbilly \"cd ${env.BASE_DIR}/dist && npm install\""
                     echo "Exchange ${env.BASE_DIR}/dist/ and ${env.BASE_DIR}/monitor/"
-                    sh "ssh -l fabien -p 979 petitbilly \"
-                            sudo systemctl stop node-monitor
-                            && rm -rf ${env.BASE_DIR}/monitor_old
-                            && mv ${env.BASE_DIR}/monitor ${env.BASE_DIR}/monitor_old
-                            && mv ${env.BASE_DIR}/dist ${env.BASE_DIR}/monitor
+                    sh "ssh -l fabien -p 979 petitbilly \" \
+                            sudo systemctl stop node-monitor \
+                            && rm -rf ${env.BASE_DIR}/monitor_old \
+                            && mv ${env.BASE_DIR}/monitor ${env.BASE_DIR}/monitor_old \
+                            && mv ${env.BASE_DIR}/dist ${env.BASE_DIR}/monitor \
                             && sudo systemctl start node-monitor \""
                     echo "Done."                    
                 }
