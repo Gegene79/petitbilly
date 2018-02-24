@@ -34,9 +34,9 @@ pipeline {
 
             steps {
                 echo 'Retreive production env file'
-                sh "scp -BCp -P 979 ${env.ENV_STORE}/node_petitbilly_pro.env ${WORKSPACE}/.env"
+                sh "scp -BCp -P 979 ${env.ENV_STORE}/node_petitbilly_pro.env .env"
                 echo "Packaging... ${env.PACKAGE_NAME}"
-                sh "tar --exclude=node_modules -czvf ${env.PACKAGE_NAME} *"
+                sh "ls -lah && tar --exclude=node_modules -czvf ${env.PACKAGE_NAME} *"
             }
         }
 

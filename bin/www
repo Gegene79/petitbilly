@@ -3,13 +3,11 @@
 /**
  * Module dependencies.
  */
-var conf= require('dotenv').config();
-
+require('dotenv').config();
 var app = require('../app');
 var debug = require('debug')('petitbilly:server');
 var http = require('http');
 
-console.log(conf);
 
 /**
  * Get port from environment and store in Express.
