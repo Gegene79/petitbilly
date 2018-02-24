@@ -9,7 +9,7 @@ pipeline {
     }
 
     stages {
-        
+
         stage('Test') {
             steps {
                 echo 'Retreive env file'
@@ -24,7 +24,7 @@ pipeline {
         stage('Empaquetar') {
 
             when {
-                env.BRANCH == 'master'
+                branch 'master'
             }
 
             steps {
@@ -40,7 +40,7 @@ pipeline {
         stage('Deploy') {
 
             when {
-                env.BRANCH == 'master'
+                branch 'master'
             }
             
             steps {
