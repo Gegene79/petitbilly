@@ -15,9 +15,9 @@ pipeline {
                 echo 'Retreive env file'
                 sh "scp -BCp -P 979 ${env.ENV_STORE}/node_petitbilly_test.env ${WORKSPACE}/.env"
                 echo 'Install modules'
-                sh "npm install"
+                sh 'npm -df install'
                 echo 'Launch test'
-                sh 'mocha'
+                sh 'npm test'
             }
         }
 
@@ -28,12 +28,10 @@ pipeline {
             }
 
             steps {
-                echo 'Remove module files'
-                sh 'rm -df node_modules .env'
                 echo 'Retreive production env file'
                 sh "scp -BCp -P 979 ${env.ENV_STORE}/node_petitbilly_pro.env ${WORKSPACE}/.env"
                 echo "Packaging... ${env.PACKAGE_NAME}"
-                sh "tar -czvf ${env.PACKAGE_NAME} *"
+                sh "tar --exclude='./node_modules' -czvf ${env.PACKAGE_NAME} *"
             }
         }
 
@@ -61,8 +59,8 @@ pipeline {
             }
         }
 
-        stage('HouseKeeping') {
-            steps {
+        post {
+            failure {
                 echo 'Tidying up....'
                 cleanWs()
             }
