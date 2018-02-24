@@ -18,6 +18,7 @@ pipeline {
                 sh 'npm -df install'
                 echo 'Launch app'
                 sh 'npm start &'
+                sleep 5
                 echo 'Launch test'
                 sh 'npm test'
             }
