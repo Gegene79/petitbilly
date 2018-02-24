@@ -6,7 +6,8 @@ pipeline {
         PACKAGE_NAME = "package_${BUILD_ID}.tar.gz"
         TARGET_PATH = "/var/www/node"
         TARGET_HOST = "fabien@petitbilly"
-        ENV_STORE = "fabien@petitbilly:/home/fabien/env"
+        ENV_PATH = "/home/fabien/env"
+        ENV_STORE = "${env.TARGET_HOST}:${env.ENV_PATH}"
         SW_PATH = "${env.TARGET_PATH}/dist_${BUILD_ID}"
                 
     }
@@ -53,7 +54,7 @@ pipeline {
                 sh "ssh -l fabien -p 979 petitbilly \"mkdir ${env.SW_PATH} && tar -xzvf ${env.TARGET_PATH}/${env.PACKAGE_NAME} -C ${env.SW_PATH} && rm -f ${env.TARGET_PATH}/${env.PACKAGE_NAME}\""
                 echo "Retreive production env file and install ${env.TARGET_PATH}/${env.PACKAGE_NAME}"
                 sh "ssh -l fabien -p 979 petitbilly \"cd ${env.SW_PATH} \
-                        && cp ${env.ENV_STORE}/node_petitbilly_pro.env ./.env \
+                        && cp ${env.ENV_PATH}/node_petitbilly_pro.env ./.env \
                         && chmod 640 .env \
                         && npm install\""
                 echo "Exchange ${env.SW_PATH} and ${env.TARGET_PATH}/monitor/"
