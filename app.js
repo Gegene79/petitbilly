@@ -5,7 +5,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-require('dotenv').config();
 var db = require('./common/db');
 var filesync = require('./common/fsdbsync');
 var monitor = require('./routes/api/monitor');
