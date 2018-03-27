@@ -1,6 +1,6 @@
-body {
-  padding-top: 50px;
-}
+#main-container {
+    padding-top: 80px;
+  }
 .navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
     margin-left: 0;
 }
@@ -46,7 +46,7 @@ text {
     display: table-row;
     vertical-align: bottom;
     font-size: 1.5em;
-    text-align: left;
+    text-align: center;
     line-height: 100%;
     font-family: 'Open Sans', sans-serif;
     color: #aaa;
@@ -54,7 +54,7 @@ text {
 
 .temperature-number{
     display: table-cell;
-    text-align: right;
+    text-align: center;
     vertical-align: top;
     line-height: 100%;
     font-family: 'Open Sans', sans-serif;
@@ -79,24 +79,20 @@ text {
     color: #aaa;
 }
 
-#ExteriorIndicatorContainer{
+#IndicatorContainer{
     display:flex;justify-content:center;align-items:center;
-    
 }
 #ExteriorIndicator{
-    display:flex;justify-content:center;align-items:center;
-}
-#ExteriorIndicatorNumber{
     position: absolute;
 }
-.indicatorContainer{
-    height:100%;
+.col-md-2{
+    display:flex;justify-content:center;align-items:center;
+    padding: 10px;
 }
+
 .equal {
     padding-top:15px;
     padding-bottom:15px;
-    display: flex;
-    flex-wrap: wrap;
     justify-content:center;align-items:center;
 }
 
@@ -112,4 +108,60 @@ text {
 }
 .blueimp-gallery-controls > .description {
   display: block;
+}
+
+
+
+.card-link:hover .fondo{
+    opacity: 1;
+    transition: opacity 200ms;
+}
+
+
+/* .card-img{
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    right: 0;
+    left: 0;;
+    height: 100%;
+    width: 100%;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    overflow: hidden;
+} */
+
+.fondo{
+    background: linear-gradient(
+                rgba(0, 0, 0, 0.3),
+                rgba(0, 0, 0, 0.0)
+                );
+    opacity: 0;
+}
+   
+
+.icon-overlay{
+    color: whitesmoke;
+    opacity: 0.5;
+    z-index: 20;
+}
+
+.icon-overlay:hover {
+    color:white;
+    opacity: 1;
+}
+
+.icon-overlay:hover ~ .card-link>.fondo{
+    opacity: 1;
+}
+
+#inner-container-photos{
+    display: flex;
+    flex-wrap: wrap;
+
+}
+
+#carousel-container{
+    position:fixed;
+    
 }
