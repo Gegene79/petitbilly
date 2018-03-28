@@ -17,33 +17,34 @@ var currentpagenb = 0;
 var currenturl = "";
 var currentquery = {};
 
-
-var chartG6H = nv.models.lineChart();
 var chartWeek = nv.models.lineWithFocusChart();
 
 $(function() {
     // Handler for .ready() called.
 
-    $('#photos').click(function(){ enablephotos(); return false; });
+    $('#photos').click(function(){ enablephotos(); browseimages(); return false; });
 
     $('#monitor').click(function(){ enablemonitor(); return false; });
 
     $( '#search-btn' ).on('click',function(){
         event.preventDefault();
         let query = $('#search-text').val();
-        if (query.length > 0){
+        enablephotos();
+        if (query.length > 0 && query != 'search'){
             search(query);
         } else {
             browseimages();
         }
     });
 
-    
-      
+    $( '#prev-btn' ).on('click',function(){
+        event.preventDefault();
+        prevpage();
+    });
 
-    $('#blueimp-gallery').on('slide', function (event, index, slide) {
-        // Gallery slide event handler
-        $(this).children('.description').text($('#inner-container-photos a').eq(index).data('description'));
+    $( '#next-btn' ).on('click',function(){
+        event.preventDefault();
+        nextpage();
     });
 
     $('#ExteriorIndicator').radialIndicator({
@@ -61,8 +62,6 @@ $(function() {
         frameNum: 600
     });
 
-    //nv.addGraph(init6HoursChart);
-    nv.addGraph(initWeekChart);
     enablemonitor();
 });
 
@@ -183,9 +182,10 @@ function updateCurrentVal(){
 function enablephotos(){
     // stop refreshing
     clearTimeout(timerCurrentVal);
-    clearTimeout(timerGraph2hours);
     clearTimeout(timerGraphWeek);
 
+    d3.selectAll('#chart_week svg > *').remove();
+    
     $('#container-monitor').addClass('d-none');
     $('.nvtooltip').remove();
 
@@ -198,7 +198,6 @@ function enablephotos(){
     $('#monitor').parent().removeClass('active');
     $('#photos').parent().addClass('active');
 
-    browseimages();
 };
 
 function browseimages(){
@@ -232,9 +231,21 @@ function enablemonitor(){
     $('#monitor').parent().addClass('active');
     $('#photos').parent().removeClass('active');
 
+    nv.addGraph(initWeekChart);
+
     updateCurrentVal();
     //updateChart6Hours();
     updateWeekChart();
+};
+
+function enableCarousel(id){
+    $('#inner-container-photos').addClass('d-none');
+    $('#carousel-container').removeClass('d-none');
+    $('#carousel_'+id).addClass('active');
+};
+
+function disableCarousel(){
+
 };
 
 
@@ -330,10 +341,12 @@ function populateimages(imgarray,totalcount){
     $('</div>').appendTo('#line'+line);
     */
 
-   //$('#inner-container-photos').empty();
+   $('#inner-container-photos').empty();
+   $('#inner-carousel').empty();
 
    var yearmonth = "";
    let line = 0;
+   var itemnb = 0;
    $.each( imgarray, function( i, item ) {
    
        let m = moment(item.created_at);
@@ -353,25 +366,12 @@ function populateimages(imgarray,totalcount){
            }
            line++;
            yearmonth = itemyearmonth;
-           $('<div id="line'+line+'" class="row">').appendTo('#inner-container-photos');
-           $('<div class="col-12 m-1"><h6>'+itemyearmonth+'</h6></div>').appendTo('#line'+line);
+           $('<div id="line'+line+'" class="row m-1">').appendTo('#inner-container-photos');
+           $('<div class="col-10"><p class="font-weight-light text-muted m-0">'+itemyearmonth+'</p></div>').appendTo('#line'+line);
        }
        let score = (item.score)? ' - score: '+item.score.toFixed(2) : '';
-       /*
-       <div class="col-6 col-lg-4">
-            <div class="card bg-light text-white">
-                <a class="icon-overlay position-absolute p-1" href="javascript:alert('downdload');"><i class="fas fa-arrow-alt-circle-down fa-lg"></i></a>
-                <a class="icon-overlay position-absolute p-1" style="left:1.5rem; "href="javascript:alert('info');" role="button" data-toggle="popover" data-trigger="focus" data-placement="right" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?"><i class="fas fa-info-circle fa-lg"></i></a>
-                
-                <a class="card-link" href="javascript:alert('image');">
-                    <img class="card-img" src="http://ultraimg.com/images/photo-1.jpg" />
-                    <div class="card-img-overlay fondo"></div>
-                </a>
-        
-            </div>
-        </div>
-       */
-      $( '<div class="col-12 col-sm-6 col-lg-4"> \
+       
+      /*$( '<div class="col-12 col-sm-6 col-md-4 col-lg-3"> \
             <div class="card bg-light text-white mx-auto"> \
                 <a class="icon-overlay position-absolute p-1" href="'+item.path+'"><i class="fas fa-arrow-alt-circle-down fa-lg"></i></a> \
                 <a class="icon-overlay position-absolute p-1" style="left:1.5rem;" href="javascript:event.preventDefault();" role="button" data-toggle="popover" data-trigger="focus" data-placement="right"  \
@@ -383,7 +383,31 @@ function populateimages(imgarray,totalcount){
                 </a> \
             </div> \
         </div>').appendTo('#line'+line);
+       */
+      $( '<div class="tarjeta"> \
+            <div class=""> \
+                <a class="icon-overlay position-absolute p-1" href="'+item.path+'" download><i class="fas fa-arrow-alt-circle-down fa-lg"></i></a> \
+                <a class="icon-overlay position-absolute p-1" style="left:1.5rem;" href="javascript:event.preventDefault();" role="button" data-toggle="popover" data-trigger="focus" data-placement="right"  \
+                title="' + item.filename + '" data-html="true" data-content="<ul><li>Dir: '+item.dir+'</li><li>Fecha: '+ created_at +'</li><li>Camara: ' + camara +'</li></ul>"> \
+                <i class="fas fa-info-circle fa-lg"></i></a> \
+                <a id="link_'+itemnb+'" class="card-link" href="#"> \
+                    <img class="img-tarjeta" src="'+item.smallthumb+'" /> \
+                    <div class="card-img-overlay fondo"></div> \
+                </a> \
+            </div> \
+        </div>').appendTo('#line'+line);
 
+
+       $('<div id="carousel_'+itemnb+'" class="carousel-item"> \
+       <img class="d-block w-100" src="'+ item.largethumb+'"> \
+       </div>').appendTo('#carousel-inner-container');
+
+       itemnb++;
+
+        /* <div class="carousel-item">
+                        <img class="d-block" src="http://ultraimg.com/images/photo-2.jpg" alt="Second slide">
+                        </div>
+        */
        /*
        $(   '<div class="col-6 col-xl-4"><a href="'+item.largethumb+'" title="'+ 
                        item.filename+'" data-description="'+created_at+'" data-gallery> \
@@ -401,7 +425,12 @@ function populateimages(imgarray,totalcount){
    // initialize photos' popovers
    $('[data-toggle="popover"]').popover({
     container: 'body'
-  });
+    });
+
+    // initialize links
+   $("a[id^='link_']").on('click',function(){
+        enableCarousel(this.id.substring(5));
+    });
 };
 
 function updatenav(pgnumber, currentpg){
@@ -457,91 +486,3 @@ function updatenav(pgnumber, currentpg){
     $('#pg-nb-btn-'+currentpg).addClass('active');
     
 };
-
-
-function thumbnailclick(img){
-
-    $('#container-photos').addClass('hidden');
-    $('#nav-menu').addClass('hidden');
-    
-    $('#container-slider').removeClass('hidden');
-    
-};
-
-
-    /*
-        Baseline graph
-    */
-    
-    /*
-    var bsgraph = nv.models.lineChart();
-
-    // mapear x e y hacia las columnas
-    bsgraph.x(function(d) {
-        var b = new Date(d.x).getTime();
-        return b;
-    });
-    //chart.y(function(d) { return d.value; });
-    // formato ejes
-    bsgraph.xAxis
-        //.staggerLabels(true)
-        .tickFormat(function (d) {
-        return d3.time.format('%H:%M')(new Date(d));
-    });
-    
-    
-    bsgraph.yTickFormat(d3.format(',.1f'));
-    bsgraph.yAxis.axisLabel("ºC");
-    
-    bsgraph.interpolate("basis");
-
-    function loadBsGraph(){
-
-        d3.json(API_BASEURL+"/temperature/Exterior/pattern", function(error, data) {	
-            if (error) return console.log(error);
-
-            var max = d3.max(data, function(c) { return d3.max(c.values, function(d) { return d.y; }); })+1; 
-            var min = d3.min(data, function(c) { return d3.min(c.values, function(d) { return d.y; }); })-1;
-            bsgraph.forceY([min, max]);
-            
-            d3.select('#chart_baseline svg')
-                .datum(data)
-                .call(bsgraph);
-
-            nv.utils.windowResize(bsgraph.update);
-        });
-        
-        timerBsGraph = setTimeout(loadBsGraph, TIMER_G2H);
-        return bsgraph;
-        
-    }
-    
-    nv.addGraph(loadBsGraph);
-    
-    var x = bsgraph.xScale();
-    var y = bsgraph.yScale();
-    var area = d3.svg.area()
-    .x(function (d) { 
-        var b = new Date(d.x).getTime();
-        return b;
-    })
-    .y0(function (d) { 
-        return y(d.y0); 
-    })
-    .y1(function (d) { 
-        return y(d.y1); 
-    });
-
-    var drawArea = function () {
-        d3.select(".area").remove();
-        d3.select('.nv-linesWrap')
-            .append("path")
-            .datum(data)
-            .attr("class", "forecastArea")
-            .attr("d", area)
-            .style("fill", "#AEC7E8")
-            .style("opacity", .2);
-    }
-    drawArea();
-
-    */

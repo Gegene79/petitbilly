@@ -158,10 +158,36 @@ text {
 #inner-container-photos{
     display: flex;
     flex-wrap: wrap;
+}
 
+
+.tarjeta{
+    flex-grow: 1;
+    margin: 2px;
+    height: 200 px;
+    overflow: hidden;
+    position: relative;
+}
+
+.img-tarjeta{
+    height: 200px;
+    object-fit: cover;
+    max-width: 100%;
+    min-width: 100%;
+    vertical-align: bottom;
 }
 
 #carousel-container{
+    display: flex;
+    position: relative;
+    height: 100%;
+}
+
+#preview{
     position:fixed;
-    
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding-top: 74px;
+    padding-bottom: 30px;
 }
