@@ -87,7 +87,8 @@ exports.browseImages = function(query,skip,limit){
         filename:1,
         dir:1,
         created_at:1,
-        loaded_at:1
+        loaded_at:1,
+        info:1
     };
 
     return executeQuery(query,fields,sort,skip,limit);
@@ -113,7 +114,8 @@ exports.searchImages = function(searchterm,skip,limit){
         dir:1,
         created_at:1,
         loaded_at:1,
-        score: { $meta: "textScore" }
+        score: { $meta: "textScore" },
+        info: 1
     };
 
     return executeQuery(query,fields,sort,skip,limit);

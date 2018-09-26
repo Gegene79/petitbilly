@@ -31,6 +31,7 @@ app.use('*/api/monitor', monitor);
 app.use('*/api/gallery', gallery);
 app.use('/', express.static('public'));
 app.use(process.env.THUMBS_DIR, express.static(process.env.THUMBS_DIR,""));
+app.use(process.env.IMAGES_DIR, express.static(process.env.IMAGES_DIR,""));
 
 // Connect DB
 db.connect(function(){
