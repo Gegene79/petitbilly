@@ -7,6 +7,18 @@ const IMG_PER_PAGE = 50;
 const CITYID = 3117735;
 const APIKEY = '1e5dd90ebb1974b27d7fbb47ea12fab3';
 const TEMP_URL= "http://api.openweathermap.org/data/2.5/forecast?id="+CITYID+"&APPID="+APIKEY+"&units=metric";
+const id_name = new Map([
+                        ["HABITACION_PRINCIPAL", "Habitación"],
+                        ["Habitación", "Habitación"], 
+                        ["EMMA_PIERRE", "Niños"],
+                        ["Emma", "Emma"],
+                        ["Pierre", "Pierre"],
+                        ["COCINA", "Cocina"],
+                        ["Cocina", "Cocina"],
+                        ["EXTERIOR", "Exterior"],
+                        ["Exterior", "Exterior"],
+                        ["Salón", "Salón"],
+                        ["SALON", "Salón"]]);
 
 var timerGraph2hours;
 var timerCurrentVal;
@@ -28,13 +40,18 @@ $(function() {
 
     $( '#search-btn' ).on('click',function(){
         event.preventDefault();
-        let query = $('#search-text').val();
-        enablephotos();
-        if (query.length > 0 && query != 'search'){
-            search(query);
-        } else {
-            browseimages();
+        launchsearch();
+    });
+
+    $('#search-text').on('keypress',function(event){
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode == '13'){
+            launchsearch();
         }
+    });
+
+    $('button[data-dismiss="modal"]').on('click',function(){
+        disableCarousel();
     });
 
     $( '#prev-btn' ).on('click',function(){
@@ -123,6 +140,8 @@ function updateWeekChart(){
         chartWeek.xAxis.tickValues(weekticks);
         chartWeek.x2Axis.tickValues(weekticks);
 
+        data.forEach(function(element){element.key=id_name.get(element.key);});
+
         d3.select('#chart_week svg')
             .datum(data)
             .call(chartWeek);
@@ -150,6 +169,7 @@ function updateCurrentVal(){
     $.getJSON( API_BASEURL+"/temperature/current", function( data ) {
         $.each( data, function(key,val) {
             let id = val._id;
+            let name = id_name.get(id);
             let temp= parseFloat(val.value);
             let m = moment(val.timestamp);
             let ts = "";
@@ -160,7 +180,7 @@ function updateCurrentVal(){
             };
 
             // update radial indicator
-            if (id=="Exterior"){
+            if (id=="EXTERIOR"){
                 var radialObj = $('#ExteriorIndicator').data('radialIndicator');
                 radialObj.animate(temp);
             }
@@ -209,8 +229,19 @@ function browseimages(){
     gotopage(1);
 };
 
+function launchsearch(){
+
+    let query = $('#search-text').val();
+    enablephotos();
+    if (query.length > 0 && query != 'search'){
+        search(query);
+    } else {
+        browseimages();
+    }
+}
 
 function search(query){
+    
     // set url to use search API
     currenturl = API_BASEURL + "/gallery/searchimages?limit="+IMG_PER_PAGE;
     // add body with text request
@@ -238,14 +269,14 @@ function enablemonitor(){
     updateWeekChart();
 };
 
-function enableCarousel(id){
-    $('#inner-container-photos').addClass('d-none');
-    $('#carousel-container').removeClass('d-none');
+function activateCarouselImage(id){
+    //$('#inner-container-photos').addClass('d-none');
+    //$('#carousel-container').removeClass('d-none');
     $('#carousel_'+id).addClass('active');
 };
 
 function disableCarousel(){
-
+    $('[id^=carousel_]').removeClass('active');
 };
 
 
@@ -390,7 +421,7 @@ function populateimages(imgarray,totalcount){
                 <a class="icon-overlay position-absolute p-1" style="left:1.5rem;" href="javascript:event.preventDefault();" role="button" data-toggle="popover" data-trigger="focus" data-placement="right"  \
                 title="' + item.filename + '" data-html="true" data-content="<ul><li>Dir: '+item.dir+'</li><li>Fecha: '+ created_at +'</li><li>Camara: ' + camara +'</li></ul>"> \
                 <i class="fas fa-info-circle fa-lg"></i></a> \
-                <a id="link_'+itemnb+'" class="card-link" href="#"> \
+                <a id="link_'+itemnb+'" class="card-link" href="#modal-photo" data-toggle="modal" data-slide-to="'+itemnb+'"> \
                     <img class="img-tarjeta" src="'+item.smallthumb+'" /> \
                     <div class="card-img-overlay fondo"></div> \
                 </a> \
@@ -399,7 +430,7 @@ function populateimages(imgarray,totalcount){
 
 
        $('<div id="carousel_'+itemnb+'" class="carousel-item"> \
-       <img class="d-block w-100" src="'+ item.largethumb+'"> \
+       <img class="img-modal" src="'+ item.largethumb+'"> \
        </div>').appendTo('#carousel-inner-container');
 
        itemnb++;
@@ -429,8 +460,9 @@ function populateimages(imgarray,totalcount){
 
     // initialize links
    $("a[id^='link_']").on('click',function(){
-        enableCarousel(this.id.substring(5));
+        activateCarouselImage(this.id.substring(5));
     });
+    
 };
 
 function updatenav(pgnumber, currentpg){

@@ -177,10 +177,12 @@ text {
     vertical-align: bottom;
 }
 
-#carousel-container{
-    display: flex;
-    position: relative;
-    height: 100%;
+.modal-content{
+    width:auto;
+}
+
+.img-modal{
+    max-height: 400px;
 }
 
 #preview{
@@ -190,4 +192,8 @@ text {
     bottom: 0;
     padding-top: 74px;
     padding-bottom: 30px;
+}
+
+#modal-photo{
+    position:fixed;
 }

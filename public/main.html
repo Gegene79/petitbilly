@@ -99,27 +99,27 @@
                 </div>
                 <div class='col-md-2'>
                     <div>
-                        <div class='temperature-title'>Emma</div>
-                        <div class='temperature-number' id='temp-Emma'>-</div>
+                        <div class='temperature-title'>Niños</div>
+                        <div class='temperature-number' id='temp-EMMA_PIERRE'>-</div>
                         <div class='temperature-unit'>ºC</div>
-                        <div class='temperature-date' id='temp-ts-Emma'>-</div>
+                        <div class='temperature-date' id='temp-ts-EMMA_PIERRE'>-</div>
                     </div>
                 </div>
-                <div class='col-md-2'>
+                <!-- div class='col-md-2'>
                         <div>
                     <div class='temperature-title'>Pierre</div>
                     <div class='temperature-number' id='temp-Pierre'>-</div>
                     <div class='temperature-unit'>ºC</div>
                     <div class='temperature-date' id='temp-ts-Pierre'>-</div>
                     </div>
-                </div>
+                </div -->
                 
                 <div class='col-md-2'>
                         <div>
                     <div class='temperature-title'>Salón</div>
-                    <div class='temperature-number' id='temp-salon'>-</div>
+                    <div class='temperature-number' id='temp-SALON'>-</div>
                     <div class='temperature-unit'>ºC</div>
-                    <div class='temperature-date' id='temp-ts-salon'>-</div>
+                    <div class='temperature-date' id='temp-ts-SALON'>-</div>
                     </div>
                 </div>
                 <div class='col-md-2'>
@@ -133,9 +133,9 @@
                 <div class='col-md-2'>
                     <div>
                         <div class='temperature-title'>Habitación</div>
-                        <div class='temperature-number' id='temp-Habitacion'>-</div>
+                        <div class='temperature-number' id='temp-HABITACION_PRINCIPAL'>-</div>
                         <div class='temperature-unit'>ºC</div>
-                        <div class='temperature-date' id='temp-ts-Habitacion'>-</div>
+                        <div class='temperature-date' id='temp-ts-HABITACION_PRINCIPAL'>-</div>
                     </div>
                 </div>
                 <!--div class="col-md-8">
@@ -161,24 +161,43 @@
 
 
         <div id="container-photos" class="row">
-        
-                
+            
             <div id="inner-container-photos" class="">       
             </div>
 
-            <div id="carousel-container" class="carousel slide d-none" data-interval="false">
-                <div id="carousel-inner-container" class="carousel-inner">
-                    
+            <div id="modal-photo" class="modal bd-example-modal-lg" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                            <div id="carousel-container" class="carousel slide" data-interval="false">
+                                <div id="carousel-inner-container" class="carousel-inner">
+                                    
+                                </div>
+                                <a class="carousel-control-prev" href="#carousel-container" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#carousel-container" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                    </div>
                 </div>
-                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
             </div>
+
+
+            
 
             <nav aria-label="Page navigation" class="text-center" id="photo-pagination">
                 <ul class="pagination text-center" >
