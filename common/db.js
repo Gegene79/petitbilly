@@ -88,7 +88,8 @@ exports.browseImages = function(query,skip,limit){
         dir:1,
         created_at:1,
         loaded_at:1,
-        info:1
+        info:1,
+        aspectRatio:1
     };
 
     return executeQuery(query,fields,sort,skip,limit);

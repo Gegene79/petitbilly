@@ -4,12 +4,23 @@
     // Para más información, visite: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
+        {
+            "name": "Python: Terminal (integrated)",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            //"stopOnEntry": true
+        },
         {
             "type": "node",
             "request": "launch",
             "name": "Iniciar programa",
             "program": "${workspaceRoot}/bin/www"
+        },
+        {
+
         }
+
     ]
 }

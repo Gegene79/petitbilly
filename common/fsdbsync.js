@@ -106,6 +106,32 @@ function deletefile(thumb){
     }
 }
 
+function getStats(path){
+
+    return Promise.resolve(fs.statAsync(path))
+    .then(function(results){
+        return new Promise(function(resolve, reject) {
+
+            imageMagick(path).size(function (err, size) {
+                if (err) {
+                    console.error('error while getting image size '+err);
+                    return resolve(null);
+                } else {
+                    //console.log(new Date().toISOString()+ ' - '+image+' size=' + size.width+'x'+size.height);
+                    results.height = size.height;
+                    results.width = size.width;
+                    results.aspectRatio = results.width/results.height;
+                    return resolve(results);
+                }
+            });
+        });
+    })
+    .catch(function (error){
+        console.error('error en getStats: '+error);
+        return Promise.resolve(null);
+    });
+};
+
 
 function getexif(path){
     return new Promise(function(resolve, reject) {
@@ -152,7 +178,10 @@ function enrichimage(imgdetails){
             mtime : stats.mtime,
             ctime : stats.ctime,
             birthtime : stats.birthtime,
-            size : stats.size
+            size : stats.size,
+            height: stats.height,
+            width: stats.width,
+            aspectRatio: stats.aspectRatio
     };
     
     if (exifdata!=null){
@@ -165,6 +194,12 @@ function enrichimage(imgdetails){
         image.info = exifdata.image;
         image.gps = exifdata.gps;
         image.exif = exifdata.exif;
+
+        if ((image.info.Orientation = 6) || (image.info.Orientation = 8)){
+            image.aspectRatio = 1/image.aspectRatio;
+        }
+
+
     }
     if (!(created_at)) {
         let str_date = image.filename.substring(4,12);
@@ -197,7 +232,7 @@ function enrichimage(imgdetails){
 }
 
 function insertimage(path){
-    return Promise.all([Promise.resolve(path),fs.statAsync(path),getexif(path)])
+    return Promise.all([Promise.resolve(path),getStats(path),getexif(path)])
     .then(function(results){
         return enrichimage(results);
     })

@@ -92,7 +92,7 @@ function enablemonitor(){
 };
 
 function activateCarouselImage(id){
-    //$('#inner-container-photos').addClass('d-none');
+    //$('#pig').addClass('d-none');
     //$('#carousel-container').removeClass('d-none');
     $('#carousel_'+id).addClass('active');
 };

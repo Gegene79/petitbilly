@@ -155,11 +155,6 @@ text {
     opacity: 1;
 }
 
-#inner-container-photos{
-    display: flex;
-    flex-wrap: wrap;
-}
-
 
 .tarjeta{
     flex-grow: 1;
